@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>模型工具｜GoalQuant</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>📊 模型工具</h1>
+  <nav>
+    <a href="index.html">首页</a> |
+    <a href="data.html">数据展示</a> |
+    <a href="learn.html">教学中心</a>
+  </nav>
+
+  <h2>⚽ 泊松分布进球概率计算器</h2>
+  <p>输入预期进球数，计算不同进球数的概率：</p>
+  <input type="number" id="lambda" placeholder="预期进球数 λ">
+  <button onclick="calculatePoisson()">计算</button>
+  <div id="poissonResult"></div>
+
+  <h2>💰 凯利公式投注比例计算器</h2>
+  <p>输入概率和赔率，计算最优投注比例：</p>
+  <input type="number" id="prob" placeholder="胜率（如 0.6）" step="0.01">
+  <input type="number" id="odds" placeholder="赔率（如 2.0）" step="0.01">
+  <button onclick="calculateKelly()">计算</button>
+  <div id="kellyResult"></div>
+
+  <script>
+    function factorial(n) {
+      return n <= 1 ? 1 : n * factorial(n - 1);
+    }
+
+    function calculatePoisson() {
+      const lambda = parseFloat(document.getElementById("lambda").value);
+      let result = "<ul>";
+      for (let k = 0; k <= 5; k++) {
+        const p = (Math.pow(lambda, k) * Math.exp(-lambda)) / factorial(k);
+        result += `<li>${k} 球：${(p * 100).toFixed(2)}%</li>`;
+      }
+      result += "</ul>";
+      document.getElementById("poissonResult").innerHTML = result;
+    }
+
+    function calculateKelly() {
+      const p = parseFloat(document.getElementById("prob").value);
+      const b = parseFloat(document.getElementById("odds").value);
+      const kelly = (b * p - 1) / (b - 1);
+      const result = kelly > 0 ? `${(kelly * 100).toFixed(2)}%` : "不建议投注";
+      document.getElementById("kellyResult").innerText = `建议投注比例：${result}`;
+    }
+  </script>
+</body>
+</html>
